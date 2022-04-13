@@ -1,5 +1,7 @@
 # Developing-Data-Products-with-Plotly
 
+https://rpubs.com/Ozge_Tugrul_Sonmez/plotlyassignment
+
 Plotly Assignment
 Ozge Tugrul Sonmez
 Regression, Confidence Interval and Prediction Interval with Bodyfat Data

@@ -1,0 +1,56 @@
+---
+title: "Plotly Assignment"
+author: "Ozge Tugrul Sonmez"
+date: "26 Temmuz 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Regression, Confidence Interval and Prediction Interval with Bodyfat Data
+
+### Bodyfat data description
+
+Lists estimates of the percentage of body fat determined by underwater weighing and various body circumference measurements for 252 men. Accurate measurement of body fat is inconvenient/costly and it is desirable to have easy methods of estimating body fat that are not inconvenient/costly.
+
+Abdomen: abdomen circumference (cm)
+
+Bodyfat: percent body fat from Siri's (1956) equation
+
+```{r message=FALSE,warning=FALSE}
+library(plotly)
+library(ggplot2)
+library(BAS)
+data(bodyfat)
+
+```
+
+
+```{r }
+
+summary(bodyfat)
+x = bodyfat$Abdomen
+y= bodyfat$Bodyfat
+bodyfat.lm = lm(Bodyfat ~ Abdomen, data=bodyfat)
+
+xnew <- seq(min(x), max(x), length.out = 100)
+ynewc <- data.frame(predict(bodyfat.lm, newdata = data.frame(Abdomen = xnew),
+                           interval = "confidence", level = 0.95))
+
+ynewp <- data.frame(predict(bodyfat.lm, newdata = data.frame(Abdomen = xnew),
+                           interval = "prediction", level = 0.95))
+
+
+plot_ly(bodyfat,x=~Abdomen,y=~Bodyfat,mode="markers",type="scatter",color = I("red"),name="abdomen and bodyfat data")%>%
+  layout(title="Abdomen and Bodyfat Regression with Prediction and Confidence Intervals")%>%
+  add_trace(y=~ynewc$lwr,x=~xnew,color = I("blue"),name="lower confidence interval")%>%
+  add_trace(y=~ynewc$upr,x=~xnew,color = I("green"),name="upper confidence interval")%>%
+  add_lines(y=~ynewp$lwr,x=~xnew,color = I("orange"),name="lower prediction interval")%>%
+  add_lines(y=~ynewp$upr,x=~xnew,color = I("purple"),name="upper prediction interval")
+
+  
+```
+
+
